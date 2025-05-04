@@ -372,7 +372,7 @@ void initMesh()
 
 	m = new myMesh();
 	if (m->readFile("dolphin.obj")) {
-		m->computeNormals();
+		//m->computeNormals();
 		makeBuffers(m);
 	}
 }

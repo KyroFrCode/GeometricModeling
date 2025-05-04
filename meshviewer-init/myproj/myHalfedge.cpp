@@ -2,6 +2,7 @@
 
 myHalfedge::myHalfedge(void)
 {
+	index = NULL;
 	source = NULL; 
 	adjacent_face = NULL; 
 	next = NULL;  

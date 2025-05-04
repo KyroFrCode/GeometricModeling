@@ -13,7 +13,12 @@ public:
 	std::vector<myFace *> faces;
 	std::string name;
 
-	void checkMesh();
+	void myMesh::checkMesh();
+	bool myMesh::check_mesh_vertex(myVertex* v);
+	bool myMesh::check_halfedges(myHalfedge* e);
+	bool myMesh::check_face(myHalfedge* e);
+	bool myMesh::check_twin(myHalfedge* e);
+
 	bool readFile(std::string filename);
 	void computeNormals();
 	void normalize();

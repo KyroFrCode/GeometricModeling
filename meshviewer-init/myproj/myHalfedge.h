@@ -13,7 +13,7 @@ public:
 	myVertex *source; 
 	myFace *adjacent_face; 
 	myHalfedge *next;  
-	myHalfedge *prev;  
+	myHalfedge *prev;
 	myHalfedge *twin;  
 
 	int index; //use as you wish.

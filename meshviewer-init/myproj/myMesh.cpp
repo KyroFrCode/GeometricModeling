@@ -5,6 +5,7 @@
 #include <map>
 #include <utility>
 #include <GL/glew.h>
+#include <stdexcept>
 #include "myvector3d.h"
 
 using namespace std;
@@ -33,17 +34,159 @@ void myMesh::clear()
 
 void myMesh::checkMesh()
 {
-	vector<myHalfedge *>::iterator it;
-	for (it = halfedges.begin(); it != halfedges.end(); it++)
+	vector<myHalfedge*>::iterator halfe;
+
+	//Counting the number of errors present on the object analysed
+	size_t error_count = 0;
+
+	//Looping through all halfedges to check if the mesh structure is correct
+	for (halfe = halfedges.begin(); halfe != halfedges.end(); halfe++)
 	{
-		if ((*it)->twin == NULL)
-			break;
+		try {
+			check_mesh_vertex((*halfe)->source); //Check for vertex structure
+			check_halfedges((*halfe)); //Check for halfdeges structure
+			check_face((*halfe));//Check if the adjacent face to all halfedges are the same
+			check_twin((*halfe));//Check if the twin are correct for all halfedges
+
+		}
+		catch (const std::exception& e) {
+			std::cerr << "Mesh check error: " << e.what() << std::endl;
+			++error_count;
+		}
 	}
-	if (it != halfedges.end())
-		cout << "Error! Not all edges have their twins!\n";
-	else cout << "Each edge has a twin!\n";
+
+	//Display in the terminal if passed the mesh structure test 
+	if (error_count == 0) {
+		std::cout << "Mesh integrity check passed: All edges and connections are valid`\n";
+	}
+	else {
+		std::cout << "Mesh integrity check failed: " << error_count << " errors found\n";
+	}
+
 }
 
+//Check for vertex mesh structure
+bool myMesh::check_mesh_vertex(myVertex* v){
+	
+	//Check if the vertex v is not NULL
+	if (v == nullptr) {
+		throw std::runtime_error("Error: vertex is nullptr");
+		return false;
+	}
+
+	//Check if the origin of the vertex v isn't empty
+	if (v->originof == nullptr){
+		throw std::runtime_error("Error: vertex " + std::to_string(v->index) + "originof is nullptr");
+		return false;
+	}
+
+	//Check if the source of the halfedge of the vertex is not NULL
+	if (v->originof->source == nullptr){
+		throw std::runtime_error("Error: vertex" + std::to_string(v->index) + "halfedge source is nullptr");
+		return false;
+	}
+
+	//Check if the current halfedge and the source halfedge from the originof of vertex is the same or not
+	if (v->originof->source != v){
+		throw std::runtime_error("Error: vertex" + std::to_string(v->index) + "and the halfedge source are not the same");
+		return false;
+	}
+
+	return true;
+}
+
+//Check for halfedges connection 
+bool myMesh::check_halfedges(myHalfedge* e){
+
+	//Check if the halfedge is nullptr
+	if (e == nullptr) {
+		throw std::runtime_error("Error: halfedge is nullptr");
+		return false;
+	}
+
+	//Check if the halfedge next and next->next is nullptr
+	if ((e->next == nullptr) || (e->next->next == nullptr)) {
+		throw std::runtime_error("Error: halfedge next or next->next is nullptr");
+		return false;
+	}
+
+	//Check if the halfedge previous is nullptr
+	if (e->prev == nullptr) {
+		throw std::runtime_error("Error: halfedge prev is nullptr");
+		return false;
+	}
+
+	//Check if halfedge is interconnected correctly
+	if (e->next->prev != e) {
+		throw std::runtime_error("Error: halfedge next->prev isn't the same as original");
+		return false;
+	}
+
+	//Alt: Check if the halfedge is interconnected corretly
+	if (e->prev->next != e) {
+		throw std::runtime_error("Error: halfedge prev->next isn't the same as original");
+		return false;
+	}
+
+	return true;
+}
+
+bool myMesh::check_face(myHalfedge* e){
+
+	//Check if the halfedge e is nullptr
+	if (e == nullptr) {
+		throw std::runtime_error("Error: halfedge is nullptr");
+	}
+
+	//Check if adjacent_face is NULL
+	if (e->adjacent_face == nullptr) {
+		throw std::runtime_error("Error: adjacent face is nullptr");
+		return false;
+	}
+
+	myFace* checked_face = e->adjacent_face;
+	myHalfedge* tmp = e->next;
+
+	//Run on all over the halfedges connected to the face
+	while(tmp != e){
+
+		if (e->adjacent_face == nullptr){
+			throw std::runtime_error("Error: adjacent face is nullptr for one of the halfedges link to the face");
+			return false;
+		}
+
+		if (e->adjacent_face != checked_face){
+			throw std::runtime_error("Error: adjacent face and checked face not the same for one of the halfedges link to the face");
+			return false;
+		}
+
+		tmp = tmp->next;
+	}
+
+	return true;
+	
+}
+
+bool myMesh::check_twin(myHalfedge* e){
+
+	//Check if halfedge e is nullptr
+	if (e == nullptr) {
+		throw std::runtime_error("Error: halfedge is nullptr");
+	}
+
+	//Check if the twin is NULL from the halfedge given
+	if (e->twin == nullptr) {
+		throw std::runtime_error("Error: the first twin from the halfedge is nullptr");
+		return false;
+	}
+
+	//Check if the twin are connected correctly in the structure
+	if (e->twin->twin != e) {
+		throw std::runtime_error("Error: twin's twin does not go back to the original halfedge e");
+	}
+	
+	return true;
+}
 
 bool myMesh::readFile(std::string filename)
 {
