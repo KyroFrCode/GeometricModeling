@@ -327,7 +327,8 @@ void myMesh::computeNormals(){
 		myVector3D vect2 = *p2 - *p;
 		
 		//Computing the cross product of the vectors and normalizing it
-		myVector3D Normalface = cross_prod(vect1,vect2);
+		myVector3D Normalface;
+		Normalface.crossproduct(vect1, vect2);
 		Normalface.normalize();
 
 		//Add compute normal face to each vertex normal
@@ -346,11 +347,6 @@ void myMesh::computeNormals(){
 			}
 		}
 	}
-}
-
-myVector3D myMesh::cross_prod(myVector3D vect1, myVector3D vect2){
-	
-	return myVector3D(vect1.dY * vect2.dZ - vect1.dZ * vect2.dY, vect1.dZ * vect2.dX - vect1.dX * vect2.dZ, vect1.dX * vect2.dY - vect1.dY * vect2.dX);
 }
 
 void myMesh::normalize()

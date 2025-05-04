@@ -21,7 +21,6 @@ public:
 
 	bool readFile(std::string filename);
 	void computeNormals();
-	myVector3D cross_prod(myVector3D vect1, myVector3D vect2);
 	void normalize();
 
 	void subdivisionCatmullClark();
