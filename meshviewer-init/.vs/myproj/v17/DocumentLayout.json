@@ -3,20 +3,24 @@
   "WorkspaceRootPath": "C:\\Users\\Adcha\\Documents\\Cours\\Geometric Modeling\\Geometric-Modeling\\meshviewer-init\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{E6C9C76F-A9C9-4F6C-91D5-8A08069B3122}|myproj\\myproj.vcxproj|C:\\Users\\Adcha\\Documents\\Cours\\Geometric Modeling\\Geometric-Modeling\\meshviewer-init\\myproj\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{E6C9C76F-A9C9-4F6C-91D5-8A08069B3122}|myproj\\myproj.vcxproj|solutionrelative:myproj\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E6C9C76F-A9C9-4F6C-91D5-8A08069B3122}|myproj\\myproj.vcxproj|C:\\Users\\Adcha\\Documents\\Cours\\Geometric Modeling\\Geometric-Modeling\\meshviewer-init\\myproj\\myMesh.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{E6C9C76F-A9C9-4F6C-91D5-8A08069B3122}|myproj\\myproj.vcxproj|solutionrelative:myproj\\myMesh.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{E6C9C76F-A9C9-4F6C-91D5-8A08069B3122}|myproj\\myproj.vcxproj|C:\\Users\\Adcha\\Documents\\Cours\\Geometric Modeling\\Geometric-Modeling\\meshviewer-init\\myproj\\myVector3D.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{E6C9C76F-A9C9-4F6C-91D5-8A08069B3122}|myproj\\myproj.vcxproj|solutionrelative:myproj\\myVector3D.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{E6C9C76F-A9C9-4F6C-91D5-8A08069B3122}|myproj\\myproj.vcxproj|C:\\Users\\Adcha\\Documents\\Cours\\Geometric Modeling\\Geometric-Modeling\\meshviewer-init\\myproj\\myMesh.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{E6C9C76F-A9C9-4F6C-91D5-8A08069B3122}|myproj\\myproj.vcxproj|solutionrelative:myproj\\myMesh.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{E6C9C76F-A9C9-4F6C-91D5-8A08069B3122}|myproj\\myproj.vcxproj|C:\\Users\\Adcha\\Documents\\Cours\\Geometric Modeling\\Geometric-Modeling\\meshviewer-init\\myproj\\myVector3D.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{E6C9C76F-A9C9-4F6C-91D5-8A08069B3122}|myproj\\myproj.vcxproj|solutionrelative:myproj\\myVector3D.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{E6C9C76F-A9C9-4F6C-91D5-8A08069B3122}|myproj\\myproj.vcxproj|C:\\Users\\Adcha\\Documents\\Cours\\Geometric Modeling\\Geometric-Modeling\\meshviewer-init\\myproj\\myVertex.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{E6C9C76F-A9C9-4F6C-91D5-8A08069B3122}|myproj\\myproj.vcxproj|solutionrelative:myproj\\myVertex.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E6C9C76F-A9C9-4F6C-91D5-8A08069B3122}|myproj\\myproj.vcxproj|C:\\Users\\Adcha\\Documents\\Cours\\Geometric Modeling\\Geometric-Modeling\\meshviewer-init\\myproj\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{E6C9C76F-A9C9-4F6C-91D5-8A08069B3122}|myproj\\myproj.vcxproj|solutionrelative:myproj\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E6C9C76F-A9C9-4F6C-91D5-8A08069B3122}|myproj\\myproj.vcxproj|C:\\Users\\Adcha\\Documents\\Cours\\Geometric Modeling\\Geometric-Modeling\\meshviewer-init\\myproj\\myMesh.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{E6C9C76F-A9C9-4F6C-91D5-8A08069B3122}|myproj\\myproj.vcxproj|solutionrelative:myproj\\myMesh.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{E6C9C76F-A9C9-4F6C-91D5-8A08069B3122}|myproj\\myproj.vcxproj|C:\\Users\\Adcha\\Documents\\Cours\\Geometric Modeling\\Geometric-Modeling\\meshviewer-init\\myproj\\myPoint3D.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
@@ -29,10 +33,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{E6C9C76F-A9C9-4F6C-91D5-8A08069B3122}|myproj\\myproj.vcxproj|C:\\Users\\Adcha\\Documents\\Cours\\Geometric Modeling\\Geometric-Modeling\\meshviewer-init\\myproj\\myFace.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{E6C9C76F-A9C9-4F6C-91D5-8A08069B3122}|myproj\\myproj.vcxproj|solutionrelative:myproj\\myFace.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E6C9C76F-A9C9-4F6C-91D5-8A08069B3122}|myproj\\myproj.vcxproj|C:\\Users\\Adcha\\Documents\\Cours\\Geometric Modeling\\Geometric-Modeling\\meshviewer-init\\myproj\\myVertex.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{E6C9C76F-A9C9-4F6C-91D5-8A08069B3122}|myproj\\myproj.vcxproj|solutionrelative:myproj\\myVertex.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{E6C9C76F-A9C9-4F6C-91D5-8A08069B3122}|myproj\\myproj.vcxproj|C:\\Users\\Adcha\\Documents\\Cours\\Geometric Modeling\\Geometric-Modeling\\meshviewer-init\\myproj\\myVertex.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
@@ -58,11 +58,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "myPoint3D.cpp",
               "DocumentMoniker": "C:\\Users\\Adcha\\Documents\\Cours\\Geometric Modeling\\Geometric-Modeling\\meshviewer-init\\myproj\\myPoint3D.cpp",
               "RelativeDocumentMoniker": "myproj\\myPoint3D.cpp",
@@ -70,25 +70,24 @@
               "RelativeToolTip": "myproj\\myPoint3D.cpp",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-05-04T13:55:09.755Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-04T13:55:09.755Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 0,
               "Title": "myVector3D.cpp",
               "DocumentMoniker": "C:\\Users\\Adcha\\Documents\\Cours\\Geometric Modeling\\Geometric-Modeling\\meshviewer-init\\myproj\\myVector3D.cpp",
               "RelativeDocumentMoniker": "myproj\\myVector3D.cpp",
               "ToolTip": "C:\\Users\\Adcha\\Documents\\Cours\\Geometric Modeling\\Geometric-Modeling\\meshviewer-init\\myproj\\myVector3D.cpp",
               "RelativeToolTip": "myproj\\myVector3D.cpp",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAFEAAAAAAAAAAAAAAD0AAAAgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2025-05-04T13:50:21.224Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 4,
               "Title": "myMesh.h",
               "DocumentMoniker": "C:\\Users\\Adcha\\Documents\\Cours\\Geometric Modeling\\Geometric-Modeling\\meshviewer-init\\myproj\\myMesh.h",
               "RelativeDocumentMoniker": "myproj\\myMesh.h",
@@ -96,12 +95,11 @@
               "RelativeToolTip": "myproj\\myMesh.h",
               "ViewState": "AgIAAAgAAAAAAAAAAAAiwBcAAAASAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2025-04-11T07:49:45.475Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-11T07:49:45.475Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "myHalfedge.cpp",
               "DocumentMoniker": "C:\\Users\\Adcha\\Documents\\Cours\\Geometric Modeling\\Geometric-Modeling\\meshviewer-init\\myproj\\myHalfedge.cpp",
               "RelativeDocumentMoniker": "myproj\\myHalfedge.cpp",
@@ -109,12 +107,11 @@
               "RelativeToolTip": "myproj\\myHalfedge.cpp",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-04-11T07:18:26.77Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-11T07:18:26.77Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 7,
               "Title": "myFace.cpp",
               "DocumentMoniker": "C:\\Users\\Adcha\\Documents\\Cours\\Geometric Modeling\\Geometric-Modeling\\meshviewer-init\\myproj\\myFace.cpp",
               "RelativeDocumentMoniker": "myproj\\myFace.cpp",
@@ -122,12 +119,11 @@
               "RelativeToolTip": "myproj\\myFace.cpp",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-04-11T07:45:18.101Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-11T07:45:18.101Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 3,
               "Title": "main.cpp",
               "DocumentMoniker": "C:\\Users\\Adcha\\Documents\\Cours\\Geometric Modeling\\Geometric-Modeling\\meshviewer-init\\myproj\\main.cpp",
               "RelativeDocumentMoniker": "myproj\\main.cpp",
@@ -135,12 +131,11 @@
               "RelativeToolTip": "myproj\\main.cpp",
               "ViewState": "AgIAAFUAAAAAAAAAAAAAAIQBAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-04-18T17:35:14.986Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-18T17:35:14.986Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 2,
               "Title": "myVertex.cpp",
               "DocumentMoniker": "C:\\Users\\Adcha\\Documents\\Cours\\Geometric Modeling\\Geometric-Modeling\\meshviewer-init\\myproj\\myVertex.cpp",
               "RelativeDocumentMoniker": "myproj\\myVertex.cpp",
@@ -209,8 +204,8 @@
       "FloatingWindowState": {
         "Id": "5d350cd0-fb3b-43a3-8568-9dce1d038731",
         "Display": 0,
-        "X": 837,
-        "Y": 159,
+        "X": 916,
+        "Y": 245,
         "Width": 1406,
         "Height": 656,
         "WindowState": 0
@@ -222,13 +217,13 @@
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "myMesh.cpp",
               "DocumentMoniker": "C:\\Users\\Adcha\\Documents\\Cours\\Geometric Modeling\\Geometric-Modeling\\meshviewer-init\\myproj\\myMesh.cpp",
               "RelativeDocumentMoniker": "myproj\\myMesh.cpp",
               "ToolTip": "C:\\Users\\Adcha\\Documents\\Cours\\Geometric Modeling\\Geometric-Modeling\\meshviewer-init\\myproj\\myMesh.cpp",
               "RelativeToolTip": "myproj\\myMesh.cpp",
-              "ViewState": "AgIAADgBAAAAAAAAAAAAAEwBAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAADIBAAAAAAAAAAAAAEcBAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2025-05-04T12:22:29.638Z",
               "EditorCaption": ""

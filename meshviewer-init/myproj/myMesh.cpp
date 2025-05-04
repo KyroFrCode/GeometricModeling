@@ -321,15 +321,10 @@ void myMesh::computeNormals(){
 		myPoint3D* p = he->source->point;
 		myPoint3D* p1 = he1->source->point;
 		myPoint3D* p2 = he2->source->point;
-
-		//Computing the two vectors by using source point of the halfedges
-		myVector3D vect1 = *p1 - *p;
-		myVector3D vect2 = *p2 - *p;
 		
 		//Computing the cross product of the vectors and normalizing it
 		myVector3D Normalface;
-		Normalface.crossproduct(vect1, vect2);
-		Normalface.normalize();
+		Normalface.setNormal(p, p1, p2);
 
 		//Add compute normal face to each vertex normal
 		*(he->source->normal) += Normalface;
