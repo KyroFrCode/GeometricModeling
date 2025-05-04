@@ -299,9 +299,58 @@ bool myMesh::readFile(std::string filename)
 }
 
 
-void myMesh::computeNormals()
-{
-	/**** TODO ****/
+void myMesh::computeNormals(){
+
+	//Reset all vertices normal
+	for (myVertex* v : vertices){
+		v->normal = new myVector3D(0, 0, 0);
+	}
+
+	/*(Normals are calculated by doing a cross product of vectors where vectors are the difference 
+	between the sources points of the half-edges from the triangle represented by the face).*/
+	
+	//For each face, Compute face normals and added to each vertex of the face
+	for (myFace* f : faces){
+
+		//Retreive the halfedges of the face
+		myHalfedge* he = f->adjacent_halfedge;
+		myHalfedge* he1 = he->next;
+		myHalfedge* he2 = he1->next;
+
+		//Retreive the source point of the halfedges
+		myPoint3D* p = he->source->point;
+		myPoint3D* p1 = he1->source->point;
+		myPoint3D* p2 = he2->source->point;
+
+		//Computing the two vectors by using source point of the halfedges
+		myVector3D vect1 = *p1 - *p;
+		myVector3D vect2 = *p2 - *p;
+		
+		//Computing the cross product of the vectors and normalizing it
+		myVector3D Normalface = cross_prod(vect1,vect2);
+		Normalface.normalize();
+
+		//Add compute normal face to each vertex normal
+		*(he->source->normal) += Normalface;
+		*(he1->source->normal) += Normalface;
+		*(he2->source->normal) += Normalface;
+		
+		//Store the compute normal face in the face f
+		f->normal = new myVector3D(Normalface);
+
+		//Normalize all vertices normals
+		for (myVertex* v : vertices){
+
+			if (v->normal){
+				v->normal->normalize();
+			}
+		}
+	}
+}
+
+myVector3D myMesh::cross_prod(myVector3D vect1, myVector3D vect2){
+	
+	return myVector3D(vect1.dY * vect2.dZ - vect1.dZ * vect2.dY, vect1.dZ * vect2.dX - vect1.dX * vect2.dZ, vect1.dX * vect2.dY - vect1.dY * vect2.dX);
 }
 
 void myMesh::normalize()
