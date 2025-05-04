@@ -405,13 +405,79 @@ void myMesh::subdivisionCatmullClark()
 
 void myMesh::triangulate()
 {
-	/**** TODO ****/
+	//Keep the original faces for compute of triangulation on the object
+	std::vector<myFace*> original_faces = faces;
+	//Clear of the faces of the object
+	faces.clear();
+
+	//For each face, do a triangulation face of the original face
+	for (myFace* f : original_faces){
+
+		if (!f || !f->adjacent_halfedge) {
+			return;
+		}
+
+		std::vector<myHalfedge*> edges;
+		myHalfedge* begin = f->adjacent_halfedge;
+		myHalfedge* current = begin;
+
+		do {
+			edges.push_back(current);
+			current = current->next;
+		} while (current != begin);
+
+		int counter = edges.size();
+
+		if (counter < 3) {
+			std::cerr << "Warning : Face with less than three edges." << std::endl;
+			continue;
+		}
+
+		auto it = std::find(faces.begin(), faces.end(), f);
+
+		if (it != faces.end()) {
+			faces.erase(it);
+		}
+
+		myVertex* v = f->adjacent_halfedge->source;
+
+		for (int i = 1;i <= counter - 2;i++) {
+
+			myFace* face = new myFace();
+
+			myHalfedge* he = new myHalfedge();
+			myHalfedge* he2 = new myHalfedge();
+			myHalfedge* he3 = new myHalfedge();
+
+			he->source = v;
+			he2->source = edges[i]->source;
+			he3->source = edges[i + 1]->source;
+
+			he->adjacent_face = face;
+			he2->adjacent_face = face;
+			he3->adjacent_face = face;
+
+			he->next = he2;
+			he2->next = he3;
+			he3->next = he;
+
+			he->prev = he3;
+			he2->prev = he;
+			he3->prev = he2;
+
+			face->adjacent_halfedge = he;
+
+			faces.push_back(face);
+			halfedges.push_back(he);
+			halfedges.push_back(he2);
+			halfedges.push_back(he3);
+		}
+	}
 }
 
 //return false if already triangle, true othewise.
 bool myMesh::triangulate(myFace *f)
 {
-	/**** TODO ****/
 	return false;
 }
 
