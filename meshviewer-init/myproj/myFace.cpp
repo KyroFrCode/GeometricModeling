@@ -27,10 +27,11 @@ void myFace::computeNormal()
 	myHalfedge* he1 = he->next;
 	myHalfedge* he2 = he1->next;
 
-	//creating the vector
+	//create vectors with the first edge as origin
 	myVector3D v1(he1->source->point->X - he->source->point->X, he1->source->point->Y - he->source->point->Y, he1->source->point->Z - he->source->point->Z);
-	myVector3D v2(he2->source->point->X - he1->source->point->X, he2->source->point->Y - he1->source->point->Y, he2->source->point->Z - he1->source->point->Z);
+	myVector3D v2(he2->source->point->X - he->source->point->X, he2->source->point->Y - he->source->point->Y, he2->source->point->Z - he->source->point->Z);
 
+	//Compute crossproduct and normalize it
 	*this->normal = v1.crossproduct(v2);
 	normal->normalize();
 }

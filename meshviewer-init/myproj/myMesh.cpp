@@ -301,7 +301,7 @@ bool myMesh::readFile(std::string filename)
 
 void myMesh::computeNormals(){
 
-	//Reset all vertices normal
+	//Reset all vertex normals
 	for (myVertex* v : vertices) {
 		v->normal->clear();
 	}
@@ -309,27 +309,26 @@ void myMesh::computeNormals(){
 	/*(Normals are calculated by doing a cross product of vectors where vectors are the difference 
 	between the sources points of the half-edges from the triangle represented by the face).*/
 	
-	//For each face, Compute face normals and added to each vertex of the face
-
+	//For each face, Compute face normals and add it to the normal of each vertex of the face
 	for (myFace* f : faces){
 
 		//Compute the normal of the face
 		f->computeNormal();
 
-		//Retreive the halfedges of the face
+		//Retreive the first halfedge of the face
 		myHalfedge* he = f->adjacent_halfedge;
 
-		//Added the compute normal to all the halfedges
+		//Add the compute normal to all the halfedges
 		do {
 			he->source->normal->dX += f->normal->dX;
 			he->source->normal->dY += f->normal->dY;
-			he->source->normal->dY += f->normal->dZ;
+			he->source->normal->dZ += f->normal->dZ;
 			he = he->next;
 
 		} while (he != f->adjacent_halfedge);
 	}
 
-	//Normalize all vertices normals
+	//Normalize all vertex normals
 	for (myVertex* v : vertices) {
 		v->normal->normalize();
 	}
