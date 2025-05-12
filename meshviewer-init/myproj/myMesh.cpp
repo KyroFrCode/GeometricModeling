@@ -438,27 +438,36 @@ void myMesh::triangulate()
 		myVertex* v = f->adjacent_halfedge->source;
 		myHalfedge* prev_link = nullptr;
 
-		//Calculating the triangulation of the current face f and creating the triangular face
+		//Calculating the triangulation of the current face f and creating the triangular faces associate 
+		// to the polygone face
 		for (int i = 1;i <= counter - 2;i++) {
 
-			//Linking each halfedges to their relative twins
+			//Linking each halfedges to their relative twins using the fan algorithm with a vertex as point of reference
+			
+			//First edge of the triangle
 			myHalfedge* he;
 
+			//Retreive the first edge
 			if (i == 1){
 				he = edges[0];
 			}
-			else{
+			else{ //Retrevied the first edge as the twin from the last iteration
 				he = prev_link;
 			}
 
+			//Second edge of the triangle
 			myHalfedge* he2 = edges[i];
+			//Third edge of the triangle
 			myHalfedge* he3;
 
+			//Retreived the last edge of the polygone as the third edge of the triangle
 			if (i == counter - 2){
 				he3 = edges.back();
 			}
 			else {
 				
+				//Creating the intern edges for triangulation and link the new edge created
+				//with the previous triangle associate twin
 				he3 = new myHalfedge();
 				myHalfedge* twin = new myHalfedge();
 
