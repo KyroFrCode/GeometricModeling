@@ -302,45 +302,36 @@ bool myMesh::readFile(std::string filename)
 void myMesh::computeNormals(){
 
 	//Reset all vertices normal
-	for (myVertex* v : vertices){
-		v->normal = new myVector3D(0, 0, 0);
+	for (myVertex* v : vertices) {
+		v->normal->clear();
 	}
 
 	/*(Normals are calculated by doing a cross product of vectors where vectors are the difference 
 	between the sources points of the half-edges from the triangle represented by the face).*/
 	
 	//For each face, Compute face normals and added to each vertex of the face
+
 	for (myFace* f : faces){
+
+		//Compute the normal of the face
+		f->computeNormal();
 
 		//Retreive the halfedges of the face
 		myHalfedge* he = f->adjacent_halfedge;
-		myHalfedge* he1 = he->next;
-		myHalfedge* he2 = he1->next;
 
-		//Retreive the source point of the halfedges
-		myPoint3D* p = he->source->point;
-		myPoint3D* p1 = he1->source->point;
-		myPoint3D* p2 = he2->source->point;
-		
-		//Calculating the cross product of the vectors and normalizing it
-		myVector3D Normalface;
-		Normalface.setNormal(p, p1, p2);
+		//Added the compute normal to all the halfedges
+		do {
+			he->source->normal->dX += f->normal->dX;
+			he->source->normal->dY += f->normal->dY;
+			he->source->normal->dY += f->normal->dZ;
+			he = he->next;
 
-		//Add compute normal face to each vertex normal
-		*(he->source->normal) += Normalface;
-		*(he1->source->normal) += Normalface;
-		*(he2->source->normal) += Normalface;
-		
-		//Store the compute normal face in the face f
-		f->normal = new myVector3D(Normalface);
+		} while (he != f->adjacent_halfedge);
+	}
 
-		//Normalize all vertices normals
-		for (myVertex* v : vertices){
-
-			if (v->normal){
-				v->normal->normalize();
-			}
-		}
+	//Normalize all vertices normals
+	for (myVertex* v : vertices) {
+		v->normal->normalize();
 	}
 }
 
@@ -417,54 +408,74 @@ void myMesh::triangulate()
 		if (!f || !f->adjacent_halfedge) {
 			continue;
 		}
-		
-		
+
+
 		std::vector<myHalfedge*> edges;
-		myHalfedge* begin = f->adjacent_halfedge;
-		myHalfedge* current = begin;
+		myHalfedge* current = f->adjacent_halfedge;
 
 		//Add all the edges to the vector "edges" for computation of the triangle associate to the face later
-		do{
+		do {
 			edges.push_back(current);
 			current = current->next;
-		} while (current != begin);
+		} while (current != f->adjacent_halfedge);
 
 		//Counter of edges present in the object
 		int counter = edges.size();
 
 		//If edges in the face are less than three return a warning and jump to the next face 
 		// (lack of information for the creation of a triangle associate to the current face)
-		if (counter < 3){
+		if (counter < 3) {
 
 			std::cerr << "Warning : Face with less than three edges." << std::endl;
 			continue;
 		}
 
-		//Finds the face f in vector faces and deletes it 
-		//(because we are currently processing it to the computation of the triangulation of this face)
-		auto it = std::find(faces.begin(), faces.end(), f);
-
-		if (it != faces.end()) {
-			faces.erase(it);
+		if (counter == 3) {
+			faces.push_back(f);
+			continue;
 		}
 
 		myVertex* v = f->adjacent_halfedge->source;
+		myHalfedge* prev_link = nullptr;
 
 		//Calculating the triangulation of the current face f and creating the triangular face
 		for (int i = 1;i <= counter - 2;i++) {
 
-			//Creation of triangle face
+			//Linking each halfedges to their relative twins
+			myHalfedge* he;
+
+			if (i == 1){
+				he = edges[0];
+			}
+			else{
+				he = prev_link;
+			}
+
+			myHalfedge* he2 = edges[i];
+			myHalfedge* he3;
+
+			if (i == counter - 2){
+				he3 = edges.back();
+			}
+			else {
+				
+				he3 = new myHalfedge();
+				myHalfedge* twin = new myHalfedge();
+
+				he3->source = edges[i + 1]->source;
+				twin->source = v;
+				
+				he3->twin = twin;
+				twin->twin = he3;
+				
+				halfedges.push_back(he3);
+				halfedges.push_back(twin);
+
+				prev_link = twin;
+			}
+
+			//Creation of the triangle face
 			myFace* face = new myFace();
-
-			//Creation of three halfedges associate to the triangle face
-			myHalfedge* he = new myHalfedge();
-			myHalfedge* he2 = new myHalfedge();
-			myHalfedge* he3 = new myHalfedge();
-
-			//Linking each halfedges to the halfedges of the object (fan algorithm)
-			he->source = v;
-			he2->source = edges[i]->source;
-			he3->source = edges[i + 1]->source;
 
 			//Associating the adjacent face of halfedges to the face created previously
 			he->adjacent_face = face;
@@ -486,9 +497,6 @@ void myMesh::triangulate()
 
 			//Store the new face and the new halfedges to the vector "faces" & "halfedges"
 			faces.push_back(face);
-			halfedges.push_back(he);
-			halfedges.push_back(he2);
-			halfedges.push_back(he3);
 		}
 	}
 }
@@ -496,6 +504,38 @@ void myMesh::triangulate()
 //return false if already triangle, true othewise.
 bool myMesh::triangulate(myFace *f)
 {
+
+	//if face or adjacent_halfedge of the face is null jump to the next face
+	if (!f || !f->adjacent_halfedge) {
+		return true;
+	}
+
+	std::vector<myHalfedge*> edges;
+	myHalfedge* current = f->adjacent_halfedge;
+
+	//Add all the edges to the vector "edges" for computation of the triangle associate to the face later
+	do {
+		edges.push_back(current);
+		current = current->next;
+	} while (current != f->adjacent_halfedge);
+
+	//Counter of edges present in the object
+	int counter = edges.size();
+
+	//If edges in the face are less than three return a warning and jump to the next face 
+	// (lack of information for the creation of a triangle associate to the current face)
+	if (counter < 3) {
+
+		std::cerr << "Warning : Face with less than three edges." << std::endl;
+		return true;
+	}
+
+	if (counter > 3) {
+
+		std::cerr << "Warning : Face with more than three edges." << std::endl;
+		return true;
+	}
+
 	return false;
 }
 

@@ -17,5 +17,7 @@ myVertex::~myVertex(void)
 
 void myVertex::computeNormal()
 {
-	/**** TODO ****/
+	myFace* f = this->originof->adjacent_face;
+
+	//somme vector / k = v1
 }
