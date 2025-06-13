@@ -17,21 +17,21 @@ myFace::~myFace(void)
 
 void myFace::computeNormal()
 {
-	//Check if structure is not null
-	if (!this->adjacent_halfedge || !this->adjacent_halfedge->next || !this->adjacent_halfedge->next->next){
-		return;
-	}
+    if (!this->adjacent_halfedge) return;
 
-	//Retreived the three edges of the triangle
-	myHalfedge* he = this->adjacent_halfedge;
-	myHalfedge* he1 = he->next;
-	myHalfedge* he2 = he1->next;
+    myVector3D n(0.0, 0.0, 0.0);
+    myHalfedge* start = this->adjacent_halfedge;
+    myHalfedge* he = start;
 
-	//create vectors with the first edge as origin
-	myVector3D v1(he1->source->point->X - he->source->point->X, he1->source->point->Y - he->source->point->Y, he1->source->point->Z - he->source->point->Z);
-	myVector3D v2(he2->source->point->X - he->source->point->X, he2->source->point->Y - he->source->point->Y, he2->source->point->Z - he->source->point->Z);
+    do {
+        myPoint3D* p0 = he->source->point;
+        myPoint3D* p1 = he->next->source->point;
+        n.dX += (p0->Y - p1->Y) * (p0->Z + p1->Z);
+        n.dY += (p0->Z - p1->Z) * (p0->X + p1->X);
+        n.dZ += (p0->X - p1->X) * (p0->Y + p1->Y);
+        he = he->next;
+    } while (he != start);
 
-	//Compute crossproduct and normalize it
-	*this->normal = v1.crossproduct(v2);
-	normal->normalize();
+    *this->normal = n;
+    this->normal->normalize();
 }

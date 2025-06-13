@@ -199,6 +199,7 @@ bool myMesh::readFile(std::string filename)
 		cout << "Unable to open file!\n";
 		return false;
 	}
+
 	name = filename;
 
 	map<pair<int, int>, myHalfedge *> twin_map;
@@ -208,29 +209,32 @@ bool myMesh::readFile(std::string filename)
 	{
 		stringstream myline(s);
 		myline >> t;
+
 		if (t == "g") {}
 		else if (t == "v")
 		{
 			float x, y, z;
 			myline >> x >> y >> z;
+
 			cout << "v " << x << " " << y << " " << z << endl;
 
 			myVertex* v = new myVertex();
 			v->point = new myPoint3D(x, y, z);
 			vertices.push_back(v);
 		}
-		else if (t == "mtllib") {}
-		else if (t == "usemtl") {}
-		else if (t == "s") {}
+
 		else if (t == "f")
 		{
 			faceids.clear();
-			while (myline >> u) // read indices of vertices from a face into a container - it helps to access them later 
+
+			while (myline >> u) // read indices of vertices from a face into a container, it helps to access them later 
 				faceids.push_back(atoi((u.substr(0, u.find("/"))).c_str()) - 1);
+
 			if (faceids.size() < 3) // ignore degenerate faces
 				continue;
 
 			hedges = new myHalfedge * [faceids.size()]; // allocate the array for storing pointers to half-edges
+			
 			for (unsigned int i = 0; i < faceids.size(); i++)
 				hedges[i] = new myHalfedge(); // pre-allocate new half-edges
 
@@ -251,6 +255,9 @@ bool myMesh::readFile(std::string filename)
 
 				// Set origin
 				hedges[i]->source = vertices[faceids[i]];
+
+				vertices[faceids[i]]->originof = hedges[i];
+
 				if (vertices[faceids[i]]->originof == nullptr)
 					vertices[faceids[i]]->originof = hedges[i];
 
@@ -279,16 +286,7 @@ bool myMesh::readFile(std::string filename)
 			// push faces to faces in myMesh
 			faces.push_back(f);
 
-			cout << "f";
-			for (int idx : faceids)
-				cout << " " << (idx + 1);
-			cout << endl;
-
 			delete[] hedges;
-
-			cout << "f"; 
-			while (myline >> u) cout << " " << atoi((u.substr(0, u.find("/"))).c_str());
-			cout << endl;
 		}
 	}
 
@@ -301,36 +299,19 @@ bool myMesh::readFile(std::string filename)
 
 void myMesh::computeNormals(){
 
-	//Reset all vertex normals
-	for (myVertex* v : vertices) {
-		v->normal->clear();
-	}
-
-	/*(Normals are calculated by doing a cross product of vectors where vectors are the difference 
+	/*(Normals are calculated by doing a cross product of vectors where vectors are the difference
 	between the sources points of the half-edges from the triangle represented by the face).*/
-	
+
 	//For each face, Compute face normals and add it to the normal of each vertex of the face
-	for (myFace* f : faces){
+	for (myFace* f : faces) {
 
 		//Compute the normal of the face
 		f->computeNormal();
-
-		//Retreive the first halfedge of the face
-		myHalfedge* he = f->adjacent_halfedge;
-
-		//Add the compute normal to all the halfedges
-		do {
-			he->source->normal->dX += f->normal->dX;
-			he->source->normal->dY += f->normal->dY;
-			he->source->normal->dZ += f->normal->dZ;
-			he = he->next;
-
-		} while (he != f->adjacent_halfedge);
 	}
 
 	//Normalize all vertex normals
 	for (myVertex* v : vertices) {
-		v->normal->normalize();
+		v->computeNormal();
 	}
 }
 
@@ -485,6 +466,8 @@ void myMesh::triangulate()
 			//Creation of the triangle face
 			myFace* face = new myFace();
 
+			*(face->normal) = *(f->normal);
+
 			//Associating the adjacent face of halfedges to the face created previously
 			he->adjacent_face = face;
 			he2->adjacent_face = face;
@@ -545,5 +528,220 @@ bool myMesh::triangulate(myFace *f)
 	}
 
 	return false;
+}
+
+
+void myMesh::simplification() {
+
+	double length_min = 9999999; //minimum length initialise to a number equivalent to a inifinity 
+	myHalfedge* edge_to_remove = nullptr; //the small edge to collapse
+	double length;
+	myVertex* k;
+	myVertex* n;
+
+	for (myHalfedge* e : halfedges) {
+
+		//If the edge or the edge next, twin is null we got the next halfedges
+		if (!e || !e->next || !e->twin) {
+			continue;
+		}
+
+		//If the source of the edge or next edge is empty or the point structure is not present we go to the next halfedges
+		if (!e->source || !e->next->source || !e->source->point || !e->next->source->point) {
+			continue;
+		}
+
+		//Taking the two end point of the current edge e
+		k = e->source;
+		n = e->next->source;
+
+		//length of the edge
+		length = k->point->dist(*n->point);
+
+		//If the condition is true we catch the current edge as the small length of edge 
+		if (length < length_min) {
+
+			length_min = length;
+			edge_to_remove = e;
+		}
+		
+	}
+	
+	//After we get the edge with the minimal length in the mesh we start the simplification as
+	//the fusion_edge to be the edge to collapse in the mesh
+
+	//We retreive the two vertex from the fusion edge (we reuse the k and n variable)
+	k = edge_to_remove->source;
+	n = edge_to_remove->next->source;
+
+	//We create the middle point of the edge
+	myPoint3D* mid_point = new myPoint3D((k->point->X + n->point->X)*0.5, (k->point->Y + n->point->Y)*0.5, (k->point->Z + n->point->Z)*0.5);
+
+	//Creating the vertex for the middle point
+	myVertex* mid_vertex = new myVertex();
+	mid_vertex->point = mid_point;
+	mid_vertex->normal = new myVector3D();
+
+	vertices.push_back(mid_vertex);
+
+	//Creating the vector<myHalfedges> of out_k and out_n to redirect the halfedges for the simplification
+	std::vector<myHalfedge*> out_k, out_n, remove;
+
+	//Remove a the end the edge with the small length choose previously
+	remove.push_back(edge_to_remove);
+	remove.push_back(edge_to_remove->twin);
+
+	//push back in to the vector associate with k and n
+	for (myHalfedge* he : halfedges) {
+
+		if (he->source == k) {
+
+			out_k.push_back(he);
+		}
+		else if (he->source == n) {
+
+			out_n.push_back(he);
+		}
+	}
+
+	//We redirect all the halfedges pointing to the vertices of the edge to remove to the middle vertex created previously
+	
+	for (myHalfedge* he : out_k) {
+
+		if (he != edge_to_remove && he != edge_to_remove->twin) {
+			he->source = mid_vertex;
+		}
+	}
+
+	for (myHalfedge* he : out_n) {
+		
+		if (he != edge_to_remove && he != edge_to_remove->twin) {
+			he->source = mid_vertex;
+		}
+
+	}
+
+	//Update of the faces
+	auto updateFace = [](myHalfedge* edge){
+
+		if (!edge || !edge->adjacent_face)
+			return;
+
+		myHalfedge* prev = edge->prev;
+		myHalfedge* next = edge->next;
+
+		if (prev && next) {
+
+			prev->next = next;
+			next->prev = prev;
+			edge->adjacent_face->adjacent_halfedge = next;
+		}
+	};
+
+	//Update the face link the edge to remove 
+	updateFace(edge_to_remove);
+	updateFace(edge_to_remove->twin);
+
+	//Creation of vector for degenerate faces
+	std::vector<myFace*> degenerateFaces;
+
+	//Find those degenerate faces
+	for (myFace* face : faces) {
+
+		if (!face->adjacent_halfedge) {
+			continue;
+		}
+
+		int count = 0;
+		myHalfedge* start = face->adjacent_halfedge;
+		myHalfedge* curr = start;
+
+		do {
+			count++;
+
+			if (!curr->next) {
+				break;
+			}
+
+			curr = curr->next;
+
+		} while (curr != start);
+
+		if (count < 3) {
+			degenerateFaces.push_back(face);
+			curr = start;
+
+			do {
+
+				if (std::find(remove.begin(), remove.end(), curr) == remove.end()) {
+					remove.push_back(curr);
+				}
+
+				curr = curr->next;
+
+			} while (curr != start);
+		}
+	}
+
+	//For each degenerate face remove the face
+	for (myFace* f : degenerateFaces) {
+
+		auto it = std::find(faces.begin(), faces.end(), f);
+
+		if (it != faces.end()) {
+			faces.erase(it);
+			delete f;
+		}
+	}
+
+	//remove the halfedges to remove of the mesh
+	for (myHalfedge* he : remove) {
+
+		auto it = std::find(halfedges.begin(), halfedges.end(), he);
+
+		if (it != halfedges.end()) {
+
+			halfedges.erase(it);
+			delete he;
+		}
+	}
+
+	//Sub function to remove the vertex of the mesh
+	auto removeVertex = [&](myVertex* v) {
+
+		auto it = std::find(vertices.begin(), vertices.end(), v);
+
+		if (it != vertices.end()) {
+			vertices.erase(it);
+			delete v;
+		}
+	};
+
+	//Remove the vertex k & n
+	removeVertex(k);
+	removeVertex(n);
+
+	std::map<std::pair<myVertex*, myVertex*>, myHalfedge*> edgePairs;
+	
+	//For each halfedge update the edges and their twins
+	for (myHalfedge* he : halfedges) {
+
+		if (!he->next) continue;
+
+		myVertex* a = he->source;
+		myVertex* b = he->next->source;
+
+		auto key = std::make_pair(a, b);
+		auto revKey = std::make_pair(b, a);
+
+		if (edgePairs.count(revKey)) {
+			he->twin = edgePairs[revKey];
+			edgePairs[revKey]->twin = he;
+		}
+		else {
+			edgePairs[key] = he;
+		}
+	}
+
 }
 

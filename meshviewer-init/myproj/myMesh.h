@@ -33,6 +33,8 @@ public:
 	void triangulate();
 	bool triangulate(myFace *);
 
+	void simplification();
+
 	void clear();
 
 	myMesh(void);
