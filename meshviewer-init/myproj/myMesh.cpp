@@ -367,11 +367,148 @@ void myMesh::splitFaceQUADS(myFace *f, myPoint3D *p)
 	/**** TODO ****/
 }
 
+void myMesh::subdivisionCatmullClark(){
 
-void myMesh::subdivisionCatmullClark()
-{
-	/**** TODO ****/
+	//Vectors to save the new mesh of the object after the clatmull clark algorithm
+	std::vector<myFace*> new_faces;
+	std::vector<myHalfedge*> new_halfedges;
+	std::vector<myVertex*> new_vertices;
+	std::map<myFace*, myVertex*> facePoints;
+	std::map<myHalfedge*, myVertex*> edgePoints;
+
+	//Compute face points
+	for (myFace* f : faces){
+
+		myVertex* v = new myVertex();
+		v->point = new myPoint3D();
+		myHalfedge* e = f->adjacent_halfedge;
+
+		int count = 0;
+
+		do {
+
+			*(v->point) += *(e->source->point);
+			count++;
+			e = e->next;
+
+		} while (e != f->adjacent_halfedge);
+
+		*(v->point) /= count;
+		facePoints[f] = v;
+	}
+
+	//Compute edge points
+	for (myHalfedge* e : halfedges) {
+
+		if (edgePoints.find(e) != edgePoints.end()) {
+			continue;
+		}
+
+		myVertex* v = new myVertex();
+		v->point = new myPoint3D();
+
+		myPoint3D p1 = *(e->source->point);
+		myPoint3D p2 = *(e->twin->source->point);
+
+		if (e->adjacent_face && e->twin->adjacent_face) {
+
+			myPoint3D f1 = *(facePoints[e->adjacent_face]->point);
+			myPoint3D f2 = *(facePoints[e->twin->adjacent_face]->point);
+			*(v->point) = (p1 + p2 + f1 + f2) / 4;
+		}
+
+		edgePoints[e] = v;
+		edgePoints[e->twin] = v;
+	}
+
+	// Update vertex position
+	for (myVertex* v : vertices) {
+
+		myPoint3D F(0, 0, 0), R(0, 0, 0), P = *(v->point);
+		int n = 0;
+		myHalfedge* e = v->originof;
+		myHalfedge* start = e;
+
+		do {
+
+			F += *(facePoints[e->adjacent_face]->point);
+			R += (*(e->source->point) + *(e->twin->source->point)) / 2;
+			e = e->twin->next;
+			n++;
+		} while (e != start);
+
+		F /= n;
+		R /= n;
+		*(v->point) = (F + R * 2 + P * (n - 3)) / n;
+	}
+
+	// Create new faces of the mesh after catmull clark algorithm
+	for (myFace* f : faces) {
+
+		myHalfedge* start = f->adjacent_halfedge;
+		myHalfedge* e = start;
+		do {
+
+			myFace* new_f = new myFace();
+			myVertex* v0 = e->source;
+			myVertex* v1 = edgePoints[e];
+			myVertex* v2 = facePoints[f];
+			myVertex* v3 = edgePoints[e->prev];
+
+			myHalfedge* he0 = new myHalfedge();
+			myHalfedge* he1 = new myHalfedge();
+			myHalfedge* he2 = new myHalfedge();
+			myHalfedge* he3 = new myHalfedge();
+
+			he0->source = v0; he1->source = v1; he2->source = v2; he3->source = v3;
+			he0->next = he1; he1->next = he2; he2->next = he3; he3->next = he0;
+			he0->prev = he3; he1->prev = he0; he2->prev = he1; he3->prev = he2;
+
+			for (auto he : { he0, he1, he2, he3 }) {
+
+				he->adjacent_face = new_f;
+				he->source->originof = he;
+			}
+
+			new_f->adjacent_halfedge = he0;
+
+			new_faces.push_back(new_f);
+			new_halfedges.insert(new_halfedges.end(), { he0, he1, he2, he3 });
+
+			for (auto vtx : { v0, v1, v2, v3 }) {
+
+				if (std::find(new_vertices.begin(), new_vertices.end(), vtx) == new_vertices.end()) {
+
+					new_vertices.push_back(vtx);
+				}
+			}
+
+			e = e->next;
+
+		} while (e != start);
+	}
+
+	// Assign twins after the creation of the new mesh
+	for (myHalfedge* he1 : new_halfedges) {
+
+		for (myHalfedge* he2 : new_halfedges) {
+
+			if (he1 != he2 && he1->source == he2->next->source && he1->next->source == he2->source) {
+
+				he1->twin = he2;
+				break;
+			}
+		}
+	}
+
+	// Update the current mesh with new one created
+	faces = new_faces;
+	halfedges = new_halfedges;
+	vertices = new_vertices;
+
+	checkMesh();
 }
+
 
 
 void myMesh::triangulate()

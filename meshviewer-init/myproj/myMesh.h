@@ -4,6 +4,7 @@
 #include "myVertex.h"
 #include <vector>
 #include <string>
+#include <map>
 
 class myMesh
 {
